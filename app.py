@@ -17,3 +17,6 @@ def generate_response(prompt, model="llama3"):
             fullResponse += token
             yield token, fullResponse  
 
+@app.route('/')
+def home():
+    pass
