@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local LLM</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div id="inter">
+
+    <div id="conversation"></div>
+
+    <form id="promptForm">
+        <input type="text" id="prompt" placeholder="Type your prompt" required>
+        <button type="submit">↑</button>
+    </form>
+    </div>
+    <script>
+    const form = document.getElementById("promptForm");
+    const promptEl = document.getElementById("prompt");
+    const conversationEl = document.getElementById("conversation");
+
+    function addMessage(role, text) {
+        const msg = document.createElement("div");
+        msg.className = `msg ${role}`;
+
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = text;
+
+        msg.appendChild(bubble);
+        conversationEl.appendChild(msg);
+
+        conversationEl.scrollTop = conversationEl.scrollHeight;
+
+        return bubble; 
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const prompt = promptEl.value.trim();
+        if (!prompt) return;
+
+        addMessage("user", `${prompt}`);
+
+        promptEl.value = "";
+
+        const botBubble = addMessage("bot", "");
+
+        const response = await fetch("/ask", {
+        method: "POST",
+        body: new URLSearchParams({ prompt })
+        });
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        botBubble.textContent += decoder.decode(value);
+        conversationEl.scrollTop = conversationEl.scrollHeight;
+        }
+    });
+    </script>
+    </body>
+</html>

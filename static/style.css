@@ -1,0 +1,64 @@
+#promptForm input,
+#promptForm button,
+#prompt,
+button {
+  -webkit-appearance: none;
+  appearance: none;
+
+  border-radius: 12px;
+  overflow: hidden;
+  background-clip: padding-box;
+}
+
+#promptForm {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  width: 100%;
+  padding: 12px;
+
+  display: flex;
+  gap: 10px;
+
+  background: white;
+  border-top: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+#prompt {
+  flex: 1;             
+  padding: 10px;
+  border-radius: 12px;
+}
+
+#promptForm button {
+  padding: 10px 14px;
+  background-color: rgb(255, 57, 103);
+  border-radius: 20px;
+}
+
+#conversation{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:12px 0;
+}
+
+.msg{
+  display:flex;
+}
+
+.msg.user{ justify-content:flex-end; }
+.msg.bot{ justify-content:flex-start; }
+
+.bubble{
+  max-width: 75%;
+  padding:10px 12px;
+  border-radius:12px;
+  background: rgb(255, 132, 132);
+  color: white;
+  white-space: pre-wrap; 
+  overflow-wrap: anywhere;
+}

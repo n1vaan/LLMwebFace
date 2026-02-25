@@ -1,5 +1,5 @@
 from ollama import chat
-from flask import Flask
+from flask import Flask, render_template, Response, request
 
 app = Flask(__name__)
 
@@ -15,8 +15,20 @@ def generate_response(prompt, model="llama3"):
         token = chunk['message']['content']
         if token:
             fullResponse += token
-            yield token, fullResponse  
+            yield token  
 
 @app.route('/')
 def home():
-    pass
+    return render_template("index.html")
+
+@app.route('/ask', methods=['POST'])
+def ask():
+    prompt = request.form['prompt']
+
+    def stream_tokens():
+        for token in generate_response(prompt):
+            yield token  # stream each token to the browser
+
+    return Response(stream_tokens(), mimetype='text/plain')
+
+app.run()
